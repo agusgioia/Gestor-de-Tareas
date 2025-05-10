@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getBoardById, AddList } from './Services/api';
+import { getBoardById, AddList, deleteBoard } from './Services/api';
 import { Card } from 'primereact/card';
 import ListView from './ListView';
 import { Button } from 'primereact/button';
@@ -60,6 +60,7 @@ const BoardView = ({ boardId }) => {
             onClick={() => setShowListForm(true)} 
           />
         </div>
+        <Button className='p-button-danger' icon="pi pi-trash" label="Eliminar Tablero" onClick={() => deleteBoard(boardId)} />
       </Card>
 
       {/* Diálogo para agregar lista */}
