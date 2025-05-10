@@ -43,7 +43,7 @@ const BoardView = ({ boardId }) => {
         subTitle={`Propietario: ${board.owner}`}
         className="p-mb-3"
       >
-        <div className="p-d-flex" style={{ overflowX: 'auto', gap: '1rem' }}>
+        <div className="p-d-flex shadow-4" style={{ overflowX: 'auto', gap: '1rem' }}>
           {board.lists?.map((list, index) => (
             <ListView 
               key={`list-${index}`}
