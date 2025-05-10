@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const BoardForm = () => {
     const toast = useRef(null);
     const [board, setBoard] = useState({
+        id:'',
         name: '',
         owner: '',
         lists: [],
