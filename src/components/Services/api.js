@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:8080/api/boards";
+const API_BASE = "https://gestordeproyectosytareas.netlify.app/api/boards";
 
 export const getBoards = async () => {
   try {

@@ -19,6 +19,7 @@ const User = ({ idUser }) => {
   // Carga inicial
   getUserBoards(idUser).then(response => {
     setUserBoards(response || []);
+    console.log('Tableros del usuario:', response);
   }).catch(err => {
     setError('Error al cargar los tableros');
   }).finally(() => {
