@@ -1,6 +1,14 @@
 import axios from "axios";
 
-const API_BASE = "https://ripe-things-arrive.loca.lt/api/boards";
+// URL que se actualiza automáticamente
+let API_BASE = localStorage.getItem('apiUrl') || 'http://localhost:8080/api/boards';
+
+// Función para actualizar la URL (ejecutar cuando ngrok cambie)
+export const updateApiUrl = (newUrl) => {
+  API_BASE = `${newUrl}/api/boards`;
+  localStorage.setItem('apiUrl', API_BASE);
+  window.location.reload();
+};
 
 export const getBoards = async () => {
   try {

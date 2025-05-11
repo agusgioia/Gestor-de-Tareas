@@ -13,6 +13,7 @@ import User from './components/User';
 import Navbar from './components/Shared/NavBar';
 import Footer from './components/Shared/Footer';
 import BoardForm from './components/BoardForm';
+import ApiConfig from './components/Services/api';
 import './CSS/index.css';
 
 
@@ -52,6 +53,7 @@ function App() {
     <Router>
       <PrimeReactProvider>
         <Toast ref={toast} />
+        <ApiConfig />
         {isAuthenticated && <Navbar user={currentUser} />}
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
