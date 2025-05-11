@@ -31,9 +31,13 @@ const ListView = ({ list, boardId, onCardAdded }) => {
       <Panel 
         header={list.title || 'Sin título'}
         className="p-mr-3"
-        style={{ minWidth: '300px' }}
+        style={{ 
+          minWidth: '300px',
+          backgroundColor: '#f1f3f5',
+          borderLeft: '4px solid #6c757d',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        }}
       >
-        {/* Renderizar todas las cards de la lista */}
         {list.cards?.map((card, index) => (
           <CardView key={`card-${index}`} card={card} />
         ))}
@@ -46,7 +50,6 @@ const ListView = ({ list, boardId, onCardAdded }) => {
         />
       </Panel>
 
-      {/* Diálogo para agregar tarjeta */}
       <Dialog 
         header="Nueva Tarjeta" 
         visible={showCardForm} 

@@ -1,4 +1,4 @@
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getBoardById, AddList, deleteBoard, updateBoard } from './Services/api';
 import { Card } from 'primereact/card';
 import ListView from './ListView';
@@ -42,7 +42,6 @@ const BoardView = ({ boardId }) => {
 
   const handleSaveBoard = async () => {
     try {
-      // Actualizar el tablero en la API
       await updateBoard(boardId, {
         ...board,
         name: editedBoard.name,
@@ -108,6 +107,11 @@ const BoardView = ({ boardId }) => {
           )
         }
         className="p-mb-3"
+        style={{ 
+          backgroundColor: '#f8f9fa',
+          borderLeft: '5px solid #3B82F6',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}
       >
         {editing ? (
           <div className="p-d-flex p-mb-3">
@@ -133,13 +137,13 @@ const BoardView = ({ boardId }) => {
           />
         )}
         
-        <div className="p-d-flex shadow-4" style={{ overflowX: 'auto', gap: '1rem' }}>
+        <div className="p-d-flex shadow-4" style={{ overflowX: 'auto', gap: '1rem', padding: '1rem', backgroundColor: '#e9ecef', borderRadius: '6px' }}>
           {board.lists?.map((list, index) => (
             <ListView 
               key={`list-${index}`}
               list={list}
               boardId={boardId}
-              onAddCard={() => {/* Lógica para añadir tarjeta */}}
+              onAddCard={() => {}}
             />
           ))}
           
@@ -150,7 +154,7 @@ const BoardView = ({ boardId }) => {
             onClick={() => setShowListForm(true)} 
           />
         </div>
-        <Button className='p-button-danger' icon="pi pi-trash" label="Eliminar Tablero" onClick={() => {
+        <Button className='p-button-danger p-mt-3' icon="pi pi-trash" label="Eliminar Tablero" onClick={() => {
           deleteBoard(boardId);
           toast.current.show({
                 severity: 'success',
@@ -161,7 +165,6 @@ const BoardView = ({ boardId }) => {
           }} />
       </Card>
 
-      {/* Diálogo para agregar lista */}
       <Dialog 
         header="Nueva Lista" 
         visible={showListForm} 

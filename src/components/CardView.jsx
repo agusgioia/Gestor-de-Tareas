@@ -7,8 +7,13 @@ const CardView = ({ card }) => {
   return (
     <Card
       title={card.title}
-      className="p-mb-3 p-shadow-2"
-      style={{ cursor: 'pointer' }}
+      className="p-mb-3"
+      style={{ 
+        cursor: 'pointer',
+        backgroundColor: '#ffffff',
+        borderLeft: '3px solid #adb5bd',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+      }}
     >
       <p className="p-m-0">{card.description || 'Sin descripción'}</p>
       {card.assignedUsers?.length > 0 && (
