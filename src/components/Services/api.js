@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "https://nasty-ducks-act.loca.lt/api/boards";
+const API_BASE = "https://bumpy-tigers-drum.loca.lt/api/boards";
 
 export const getBoards = async () => {
   try {
