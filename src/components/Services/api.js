@@ -52,20 +52,12 @@ export const updateBoard = async (boardId, updatedBoard) => {
   }
 }
 
-export const AddCard = async (boardId, listTitle, card) => {
+export const deleteBoard = async (boardId) => {
   try {
-    const response = await axios.post(
-      `${API_BASE}/${boardId}/lists/${listTitle}/cards`,
-      card,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const response = await axios.delete(`${API_BASE}/${boardId}`);
     return response.data;
   } catch (error) {
-    console.error("Error adding card to board:", error);
+    console.error("Error deleting board:", error);
     throw error;
   }
 }
@@ -88,12 +80,56 @@ export const AddList = async (boardId, listTitle) => {
   }
 };
 
-export const deleteBoard = async (boardId) => {
+export const DeleteList = async (boardId, listTitle) => {
   try {
-    const response = await axios.delete(`${API_BASE}/${boardId}`);
+    const response = await axios.delete(
+      `${API_BASE}/${boardId}/lists/${listTitle}`,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error("Error deleting board:", error);
+    console.error("Error deleting list from board:", error);
     throw error;
   }
 }
+
+export const AddCard = async (boardId, listTitle, card) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE}/${boardId}/lists/${listTitle}/cards`,
+      card,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding card to board:", error);
+    throw error;
+  }
+}
+
+export const deleteCard = async (boardId, listTitle, cardTitle) => {
+  try {
+    const response = await axios.delete(
+      `${API_BASE}/${boardId}/lists/${listTitle}/cards/${cardTitle}`,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting card from board:", error);
+    throw error;
+  }
+}
+
+

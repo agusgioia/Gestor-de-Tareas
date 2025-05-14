@@ -1,11 +1,10 @@
-import  { useEffect,useRef } from 'react';
-import { useState } from 'react';
+import { useEffect,useState, useRef, createContext } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './components/Services/firebase';
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
 import { PrimeReactProvider } from 'primereact/api';
-import { Toast } from 'primereact/toast';
 import { Navigate } from 'react-router-dom';
+import { Toast } from 'primereact/toast';
 import Login from './components/Auth/login';
 import Register from './components/Auth/register';
 import Administrator from './components/Administrator';
@@ -15,6 +14,7 @@ import Footer from './components/Shared/Footer';
 import BoardForm from './components/BoardForm';
 import './CSS/index.css';
 
+export const ToastContext = createContext(null);
 
 function App() {
 
@@ -51,7 +51,8 @@ function App() {
   return (
     <Router>
       <PrimeReactProvider>
-        <Toast ref={toast} />
+        <ToastContext.Provider value={toast}>
+        <Toast ref={toast} position="top-right" />
         {isAuthenticated && <Navbar user={currentUser} />}
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
@@ -65,6 +66,7 @@ function App() {
           <Route path="/user/boardform" element={<BoardForm/>} />
         </Routes>
         <Footer />
+        </ToastContext.Provider>
       </PrimeReactProvider>
     </Router>
   );

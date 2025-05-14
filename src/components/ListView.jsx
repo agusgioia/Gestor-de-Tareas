@@ -3,11 +3,14 @@ import { Button } from 'primereact/button';
 import CardView from './CardView';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Chips } from 'primereact/chips';
 import { AddCard } from './Services/api';
+import { deleteCard } from './Services/api';
+import { ToastContext } from '../App';
 
-const ListView = ({ list, boardId, onCardAdded }) => {
+const ListView = ({ list, boardId }) => {
+  const toast = useContext(ToastContext);
   const [showCardForm, setShowCardForm] = useState(false);
   const [newCard, setNewCard] = useState({
     title: '',
@@ -26,6 +29,24 @@ const ListView = ({ list, boardId, onCardAdded }) => {
     }
   };
 
+  const HandleDeleteCard = async (boardId, listTitle, cardTitle) => {
+    try {
+      await deleteCard(boardId, listTitle, cardTitle);
+      toast.current.show({
+        severity: 'success',
+        summary: 'Tarjeta eliminada',
+        detail: `La tarjeta ${cardTitle} ha sido eliminada.`,
+        life: 3000
+      });
+    } catch (error) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: `No se pudo eliminar la tarjeta ${cardTitle}.`,
+        life: 3000
+      });
+    }
+  }  
   return (
     <>
       <Panel 
@@ -39,7 +60,15 @@ const ListView = ({ list, boardId, onCardAdded }) => {
         }}
       >
         {list.cards?.map((card, index) => (
-          <CardView key={`card-${index}`} card={card} />
+          <div key={`card-${index}`} className="p-mb-2">
+            <CardView key={`card-${index}`} card={card} />
+            <Button
+              label="Eliminar tarjeta"
+              icon="pi pi-trash"
+              className="p-button-danger p-button-text p-button-sm"
+              onClick={() => HandleDeleteCard(boardId,list.title,card.title)}
+            />
+          </div>
         ))}
         
         <Button 

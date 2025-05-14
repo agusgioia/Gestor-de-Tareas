@@ -1,19 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getBoardById, AddList, deleteBoard, updateBoard } from './Services/api';
 import { Card } from 'primereact/card';
 import ListView from './ListView';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
+import { DeleteList } from './Services/api';
+import { Toast } from 'primereact/toast';
+import { ToastContext } from '../App'; 
 
 const BoardView = ({ boardId }) => {
+  const toast = useContext(ToastContext);
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showListForm, setShowListForm] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
   const [editing, setEditing] = useState(false);
   const [editedBoard, setEditedBoard] = useState({ name: '', owner: '' });
-  const toast = useRef(null);
+  
 
   useEffect(() => {
     const fetchBoard = async () => {
@@ -32,6 +36,12 @@ const BoardView = ({ boardId }) => {
 
   const handleAddList = async() => {
     await AddList(boardId, newListTitle);
+    toast.current.show({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Lista agregada correctamente',
+      life: 6000
+    });
     setShowListForm(false);
     setNewListTitle('');
   };
@@ -52,7 +62,7 @@ const BoardView = ({ boardId }) => {
                 severity: 'success',
                 summary: 'Éxito',
                 detail: 'Tablero actualizado correctamente',
-                life: 3000
+                life: 6000
             });
       
       setEditing(false);
@@ -74,11 +84,33 @@ const BoardView = ({ boardId }) => {
     }));
   };
 
+  const HandleDeleteList = async (boardId, listTitle) => {
+    try {
+      await DeleteList(boardId, listTitle);
+      toast.current.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Lista eliminada correctamente',
+        life: 6000
+      });
+    } catch (error) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al eliminar la lista',
+        life: 6000
+      });
+    }
+  };
+
+
   if (loading) return <div className="p-text-center"><i className="pi pi-spinner pi-spin" style={{ fontSize: '2rem' }} /></div>;
   if (!board) return <div className="p-text-center">No se encontró el tablero</div>;
 
   return (
+    
     <div className="p-m-3">
+      <Toast ref={toast} position='top-right'/>
       <Card 
         title={
           editing ? (
@@ -139,12 +171,19 @@ const BoardView = ({ boardId }) => {
         
         <div className="p-d-flex shadow-4" style={{ overflowX: 'auto', gap: '1rem', padding: '1rem', backgroundColor: '#e9ecef', borderRadius: '6px' }}>
           {board.lists?.map((list, index) => (
-            <ListView 
-              key={`list-${index}`}
-              list={list}
-              boardId={boardId}
-              onAddCard={() => {}}
-            />
+            <div key={`list-${index}`} >
+              <ListView 
+                key={`list-${index}`}
+                list={list}
+                boardId={boardId}
+              />
+              <Button 
+              className='p-button-danger'
+              icon="pi pi-trash"
+              label="Eliminar Lista"
+              onClick={() => HandleDeleteList(boardId, list.title)}
+              />
+            </div>
           ))}
           
           <Button 
@@ -153,6 +192,7 @@ const BoardView = ({ boardId }) => {
             label="Agregar Lista" 
             onClick={() => setShowListForm(true)} 
           />
+          
         </div>
         <Button className='p-button-danger p-mt-3' icon="pi pi-trash" label="Eliminar Tablero" onClick={() => {
           deleteBoard(boardId);

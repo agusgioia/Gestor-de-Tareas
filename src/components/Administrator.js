@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { getBoards } from './Services/api';
 import { ProgressSpinner } from 'primereact/progressspinner'
 import BoardView from './BoardView';
