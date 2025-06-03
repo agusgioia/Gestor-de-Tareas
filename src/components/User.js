@@ -33,10 +33,9 @@ const User = ({ idUser }) => {
         });
     };
 
-    fetchBoards(); // carga inicial
+    fetchBoards(); 
 
-    const interval = setInterval(fetchBoards, 10000); // actualizar cada 10 segundos
-
+    const interval = setInterval(fetchBoards, 10000); 
     return () => clearInterval(interval);
   }, [idUser]);
 

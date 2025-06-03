@@ -21,8 +21,11 @@ const Administrator = ({adminData}) => {
       }
     }
     fetchBoards();
-  }
-  , []);
+
+    const interval = setInterval(fetchBoards, 10000); 
+    return () => clearInterval(interval);
+
+  }, []);
 
   if (loading) return
   <div className='p-text-center'>

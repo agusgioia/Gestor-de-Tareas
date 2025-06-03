@@ -31,7 +31,7 @@ function App() {
       const user = auth.currentUser;
       setCurrentUser(user.displayName); 
       console.log("Usuario autenticado:", user.displayName);
-      const role = user.displayName === "admin123" ? "administrator" : "user";
+      const role = user.displayName === process.env.REACT_APP_DISPLAY_NAME ? "administrator" : "user";
       setUserRole(role);
     } else {
       setUserRole(null);
