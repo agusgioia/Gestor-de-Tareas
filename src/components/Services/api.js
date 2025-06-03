@@ -1,10 +1,11 @@
 import axios from "axios";
 
+const API_BASE_Render = "https://api-gestortrello.onrender.com/api/boards";
 const API_BASE = "http://localhost:8080/api/boards";
 
 export const getBoards = async () => {
   try {
-    const response = await axios.get(API_BASE);
+    const response = await axios.get(API_BASE_Render);
     return response.data;
   } catch (error) {
     console.error("Error fetching boards:", error);
@@ -14,7 +15,7 @@ export const getBoards = async () => {
 
 export const getBoardById = async (boardId) => {
   try {
-    const response = await axios.get(`${API_BASE}/${boardId}`);
+    const response = await axios.get(`${API_BASE_Render}/${boardId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching board:", error);
@@ -24,7 +25,7 @@ export const getBoardById = async (boardId) => {
 
 export const getUserBoards = async (userId) => {
   try {
-    const response = await axios.get(`${API_BASE}/user/${userId}`);
+    const response = await axios.get(`${API_BASE_Render}/user/${userId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching user boards:", error);
@@ -34,7 +35,7 @@ export const getUserBoards = async (userId) => {
 
 export const createBoard = async (board) => {
   try {
-    const response = await axios.post(API_BASE, board);
+    const response = await axios.post(API_BASE_Render, board);
     return response.data;
   } catch (error) {
     console.error("Error creating board:", error);
@@ -44,7 +45,7 @@ export const createBoard = async (board) => {
 
 export const updateBoard = async (boardId, updatedBoard) => {
   try {
-    const response = await axios.put(`${API_BASE}/${boardId}`, updatedBoard);
+    const response = await axios.put(`${API_BASE_Render}/${boardId}`, updatedBoard);
     return response.data;
   } catch (error) {
     console.error("Error updating board:", error);
@@ -54,7 +55,7 @@ export const updateBoard = async (boardId, updatedBoard) => {
 
 export const deleteBoard = async (boardId) => {
   try {
-    const response = await axios.delete(`${API_BASE}/${boardId}`);
+    const response = await axios.delete(`${API_BASE_Render}/${boardId}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting board:", error);
@@ -65,7 +66,7 @@ export const deleteBoard = async (boardId) => {
 export const AddList = async (boardId, listTitle) => {
   try {
     const response = await axios.post(
-      `${API_BASE}/${boardId}/lists`,
+      `${API_BASE_Render}/${boardId}/lists`,
       { title: listTitle }, 
       {
         headers: {
@@ -83,7 +84,7 @@ export const AddList = async (boardId, listTitle) => {
 export const DeleteList = async (boardId, listTitle) => {
   try {
     const response = await axios.delete(
-      `${API_BASE}/${boardId}/lists/${listTitle}`,
+      `${API_BASE_Render}/${boardId}/lists/${listTitle}`,
       {
         headers: {
           'Content-Type': 'application/json'
@@ -100,7 +101,7 @@ export const DeleteList = async (boardId, listTitle) => {
 export const AddCard = async (boardId, listTitle, card) => {
   try {
     const response = await axios.post(
-      `${API_BASE}/${boardId}/lists/${listTitle}/cards`,
+      `${API_BASE_Render}/${boardId}/lists/${listTitle}/cards`,
       card,
       {
         headers: {
@@ -118,7 +119,7 @@ export const AddCard = async (boardId, listTitle, card) => {
 export const deleteCard = async (boardId, listTitle, cardTitle) => {
   try {
     const response = await axios.delete(
-      `${API_BASE}/${boardId}/lists/${listTitle}/cards/${cardTitle}`,
+      `${API_BASE_Render}/${boardId}/lists/${listTitle}/cards/${cardTitle}`,
       {
         headers: {
           'Content-Type': 'application/json'
