@@ -26,6 +26,7 @@ function App() {
 
   useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    console.log('API Key:', process.env.REACT_APP_FIREBASE_API_KEY);
     if (user) {
       setIsAuthenticated(true);
       const user = auth.currentUser;
