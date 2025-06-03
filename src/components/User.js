@@ -12,8 +12,11 @@ const User = ({ idUser }) => {
   useEffect(() => {
     if (!idUser) return;
 
+    let initialLoad = true;
+
     const fetchBoards = () => {
-      setLoading(true);
+      if (initialLoad) setLoading(true);
+
       getUserBoards(idUser)
         .then(response => {
           setUserBoards(response || []);
@@ -23,7 +26,10 @@ const User = ({ idUser }) => {
           setError('Error al cargar los tableros');
         })
         .finally(() => {
-          setLoading(false);
+          if (initialLoad) {
+            setLoading(false);
+            initialLoad = false;
+          }
         });
     };
 
@@ -31,7 +37,7 @@ const User = ({ idUser }) => {
 
     const interval = setInterval(fetchBoards, 10000); // actualizar cada 10 segundos
 
-    return () => clearInterval(interval); // limpiar al desmontar
+    return () => clearInterval(interval);
   }, [idUser]);
 
   if (loading) {
