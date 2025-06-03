@@ -3,40 +3,36 @@ import { getUserBoards } from './Services/api';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import BoardView from './BoardView';
 import { Button } from 'primereact/button';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from './Services/firebase'; 
 
 const User = ({ idUser }) => {
-  const [userBoards, setUserBoards] = useState([]); // Inicializar como array vacío
+  const [userBoards, setUserBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-  if (!idUser) return;
+    if (!idUser) return;
 
-  setLoading(true);
-  
-  // Carga inicial
-  getUserBoards(idUser).then(response => {
-    setUserBoards(response || []);
-    console.log('Tableros del usuario:', response);
-  }).catch(err => {
-    setError('Error al cargar los tableros');
-  }).finally(() => {
-    setLoading(false);
-  });
+    const fetchBoards = () => {
+      setLoading(true);
+      getUserBoards(idUser)
+        .then(response => {
+          setUserBoards(response || []);
+          console.log('Tableros actualizados:', response);
+        })
+        .catch(() => {
+          setError('Error al cargar los tableros');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
 
-  // Listener en tiempo real
-  const unsubscribe = onSnapshot(collection(db, "boards"), (snapshot) => {
-    const updatedBoards = snapshot.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
-      .filter(board => board.owner === idUser);
-    
-    setUserBoards([...updatedBoards]); // Spread operator para nueva referencia
-  });
+    fetchBoards(); // carga inicial
 
-  return () => unsubscribe();
-}, [idUser]);
+    const interval = setInterval(fetchBoards, 10000); // actualizar cada 10 segundos
+
+    return () => clearInterval(interval); // limpiar al desmontar
+  }, [idUser]);
 
   if (loading) {
     return (
@@ -64,9 +60,10 @@ const User = ({ idUser }) => {
       <div className='p-d-flex p-flex-wrap p-jc-center p-gap-3'>
         {userBoards.map((board) => (
           <BoardView 
-            key={`${board.id}-${JSON.stringify(board)}`} 
+            key={board.id} 
             boardId={board.id} 
-            forceUpdate={Date.now()}/>
+            forceUpdate={Date.now()} 
+          />
         ))}
       </div>
     </div>
