@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_BASE_Render = "https://api-gestortrello.onrender.com/api/boards";
-const API_BASE = "http://localhost:8080/api/boards";
 
 export const getBoards = async () => {
   try {
