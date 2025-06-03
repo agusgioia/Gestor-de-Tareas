@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Frontend - Gestor de Tareas (Clon Trello)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto es el frontend desarrollado en React para un gestor de tareas estilo Trello. La interfaz consume una API backend desplegada y utiliza Firebase para la autenticación.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Tecnologías usadas
 
-### `npm start`
+- React
+- Firebase Authentication
+- Axios (cliente HTTP para consumir la API)
+- Netlify (despliegue)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Configuración de variables de entorno
 
-### `npm test`
+Para mantener seguras las credenciales de Firebase, la configuración se debe manejar con variables de entorno.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Crea un archivo `.env` en la raíz del proyecto.
+2. Agrega las variables con prefijo `REACT_APP_` así:
 
-### `npm run build`
+REACT_APP_FIREBASE_API_KEY=tu_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=tu_auth_domain
+REACT_APP_FIREBASE_DATABASE_URL=tu_database_url
+REACT_APP_FIREBASE_PROJECT_ID=tu_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=tu_storage_bucket
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=tu_messaging_sender_id
+REACT_APP_FIREBASE_APP_ID=tu_app_id
+REACT_APP_FIREBASE_MEASUREMENT_ID=tu_measurement_id
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Asegúrate de tener `.env` listado en tu `.gitignore` para no subirlo a GitHub.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. En el código, usa `process.env.REACT_APP_FIREBASE_API_KEY` para acceder a cada variable.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Instalación y ejecución local
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm install
+npm start
