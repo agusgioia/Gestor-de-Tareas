@@ -9,7 +9,7 @@ Este proyecto es el frontend desarrollado en React para un gestor de tareas esti
 - React
 - Firebase Authentication
 - Axios (cliente HTTP para consumir la API)
-- Netlify (despliegue)
+- Netlify (despliegue) : https://gestordeproyectosytareas.netlify.app
 
 ---
 
