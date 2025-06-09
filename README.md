@@ -41,3 +41,5 @@ REACT_APP_FIREBASE_MEASUREMENT_ID=tu_measurement_id
 ```bash
 npm install
 npm start
+
+IMPORTANTE: Consume una API desarrollada en Spring Boot desplegada en Render y si está sin uso un tiempo prolongado entra en un estado de "pausa", así que la primera petición a la API puede que tarde un poco.
