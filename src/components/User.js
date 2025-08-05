@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { getUserBoards } from './Services/api';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import BoardView from './BoardView';
@@ -8,45 +8,38 @@ const User = ({ idUser }) => {
   const [userBoards, setUserBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const intervalRef = useRef(null); // para asegurar que no se superpongan
 
-  const userBoardsRef = useRef([]);
+  const fetchBoards = useCallback(async () => {
+    try {
+      const response = await getUserBoards(idUser);
+      setUserBoards(response || []);
+      setError(null);
+    } catch (e) {
+      setError('Error al cargar los tableros');
+    } finally {
+      setLoading(false);
+    }
+  }, [idUser]);
 
   useEffect(() => {
     if (!idUser) return;
 
-    let initialLoad = true;
-
-    const fetchBoards = () => {
-      if (initialLoad) setLoading(true);
-
-      getUserBoards(idUser)
-        .then(response => {
-          const newBoards = response || [];
-          userBoardsRef.current = newBoards;
-          setUserBoards(newBoards);
-        })
-        .catch(() => {
-          setError('Error al cargar los tableros');
-        })
-        .finally(() => {
-          if (initialLoad) {
-            setLoading(false);
-            initialLoad = false;
-          }
-        });
-    };
-
+    setLoading(true);
     fetchBoards();
 
-    const interval = setInterval(fetchBoards, 10000);
-    return () => clearInterval(interval);
-  }, [idUser]);
+    // limpia intervalos viejos
+    if (intervalRef.current) clearInterval(intervalRef.current);
 
+    intervalRef.current = setInterval(fetchBoards, 10000);
+
+    return () => clearInterval(intervalRef.current);
+  }, [idUser, fetchBoards]);
 
   if (loading) {
     return (
       <div className='p-text-center'>
-        <ProgressSpinner className="p-mt-5" style={{ width: '2rem', height: '2rem' }} />
+        <ProgressSpinner style={{ width: '2rem', height: '2rem' }} />
       </div>
     );
   }
@@ -57,7 +50,10 @@ const User = ({ idUser }) => {
         <p className='p-text-danger'>{error}</p>
         <Button 
           label="Intentar nuevamente" 
-          onClick={() => window.location.reload()} 
+          onClick={() => {
+            setLoading(true);
+            fetchBoards();
+          }} 
         />
       </div>
     );
