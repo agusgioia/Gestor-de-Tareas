@@ -1,40 +1,43 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserBoards } from './Services/api';
+import {  collection, onSnapshot } from 'firebase/firestore';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import BoardView from './BoardView';
 import { Button } from 'primereact/button';
+import { db } from './Services/firebase';
 
 const User = ({ idUser }) => {
   const [userBoards, setUserBoards] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const intervalRef = useRef(null); // para asegurar que no se superpongan
-
-  const fetchBoards = useCallback(async () => {
-    try {
-      const response = await getUserBoards(idUser);
-      setUserBoards(response || []);
-      setError(null);
-    } catch (e) {
-      setError('Error al cargar los tableros');
-    } finally {
-      setLoading(false);
-    }
-  }, [idUser]);
+  const [loading,   setLoading]   = useState(true);
+  const [error,     setError]     = useState(null);
 
   useEffect(() => {
     if (!idUser) return;
-
     setLoading(true);
-    fetchBoards();
+    setError(null);
 
-    // limpia intervalos viejos
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    const unsubscribe = onSnapshot(
+      collection(db, 'boards'),
+      () => {
+        getUserBoards(idUser)
+          .then(boards => {
+            setUserBoards(boards || []);
+            setLoading(false);
+          })
+          .catch(() => {
+            setError('Error al cargar los tableros');
+            setLoading(false);
+          });
+      },
+      err => {
+        console.error(err);
+        setError('Error en la suscripción');
+        setLoading(false);
+      }
+    );
 
-    intervalRef.current = setInterval(fetchBoards, 10000);
-
-    return () => clearInterval(intervalRef.current);
-  }, [idUser, fetchBoards]);
+    return () => unsubscribe();
+  }, [idUser]);
 
   if (loading) {
     return (
@@ -49,10 +52,10 @@ const User = ({ idUser }) => {
       <div className='p-text-center p-mt-5'>
         <p className='p-text-danger'>{error}</p>
         <Button 
-          label="Intentar nuevamente" 
+          label="Reintentar" 
           onClick={() => {
+            setError(null);
             setLoading(true);
-            fetchBoards();
           }} 
         />
       </div>
@@ -63,11 +66,10 @@ const User = ({ idUser }) => {
     <div className='p-m-3'>
       <h1 className='p-text-center'>Tableros de {idUser}</h1>
       <div className='p-d-flex p-flex-wrap p-jc-center p-gap-3'>
-        {userBoards.map((board) => (
+        {userBoards.map(board => (
           <BoardView 
             key={board.id} 
             boardId={board.id} 
-            forceUpdate={Date.now()} 
           />
         ))}
       </div>
