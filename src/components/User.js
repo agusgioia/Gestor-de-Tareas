@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getUserBoards } from './Services/api';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import BoardView from './BoardView';
@@ -8,6 +8,8 @@ const User = ({ idUser }) => {
   const [userBoards, setUserBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const userBoardsRef = useRef([]);
 
   useEffect(() => {
     if (!idUser) return;
@@ -19,8 +21,9 @@ const User = ({ idUser }) => {
 
       getUserBoards(idUser)
         .then(response => {
-          setUserBoards([...response || []]); // fuerza nueva referencia
-          console.log('Tableros actualizados:', response);
+          const newBoards = response || [];
+          userBoardsRef.current = newBoards;
+          setUserBoards(newBoards);
         })
         .catch(() => {
           setError('Error al cargar los tableros');
