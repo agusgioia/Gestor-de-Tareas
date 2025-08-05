@@ -19,7 +19,7 @@ const User = ({ idUser }) => {
 
       getUserBoards(idUser)
         .then(response => {
-          setUserBoards(response || []);
+          setUserBoards([...response || []]); // fuerza nueva referencia
           console.log('Tableros actualizados:', response);
         })
         .catch(() => {
@@ -33,11 +33,12 @@ const User = ({ idUser }) => {
         });
     };
 
-    fetchBoards(); 
+    fetchBoards();
 
-    const interval = setInterval(fetchBoards, 10000); 
+    const interval = setInterval(fetchBoards, 10000);
     return () => clearInterval(interval);
   }, [idUser]);
+
 
   if (loading) {
     return (
